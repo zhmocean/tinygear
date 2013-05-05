@@ -1,0 +1,50 @@
+- name: monitor1
+  publisher: 
+    who: monitor1_publisher
+  reader:
+    type: db
+    dbname: p
+    host: localhost
+    password: pwd
+    username: user
+    sql: select count(*) from table
+    driver: mysql
+  sandglass: 
+    delay: 7
+  checker:
+    body.0.count(*):
+      $gt: 10000000
+
+- name: monitor2
+  expectedKey: count(*)
+  expectedValue: '10000000'
+  publisher: 
+    who: monitor2_publisher
+  reader:
+    type: db
+    dbname: p
+    host: localhost
+    password: pwd
+    username: user
+    sql: select count(*) from table where state='success'
+    driver: mysql
+  sandglass:
+    delay: 3
+  checker:
+    body.0.count(*):
+      $lt: 1
+
+- name: monitor3
+  publisher: 
+    who: monitor3_publisher
+  reader: 
+    appName: myproduct
+    host: 'localhost:8080/error'
+    targetHost: localhost
+    type: rest
+    hour: -1
+  sandglass: 
+    delay: 2
+  checker:
+    body.0.count:
+      $gt: 0

@@ -1,0 +1,20 @@
+$def with (result)
+
+<html>
+<head>
+<title>
+test
+</title>
+</head>
+<body>
+$for k in result.keys():
+	<li>$k: sandglass.delay($result[k]['sandglass']['delay'])</li>
+	<div>
+	名称: $result[k].myName()
+	最后一次状态
+		时间
+		是否成功
+	变更
+	</div>
+</body>
+</html>
